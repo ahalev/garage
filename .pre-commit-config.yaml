@@ -67,7 +67,7 @@ repos:
         exclude: docs/bibtex.json            # auto-generated file, but version controlled for use in readthedocs
       - id: trailing-whitespace              # Trims trailing whitespace.
 
-  - repo: https://gitlab.com/pycqa/flake8
+  - repo: https://github.com/PyCQA/flake8
     rev: 3.8.3
     hooks:
       - id: flake8                           # Run flake8 on your Python files
