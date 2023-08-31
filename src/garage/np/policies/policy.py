@@ -63,6 +63,7 @@ class Policy(abc.ABC):
             garage.EnvSpec: Environment specification.
 
         """
+        return self._env_spec
 
     @property
     def observation_space(self):
