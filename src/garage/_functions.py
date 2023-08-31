@@ -143,7 +143,7 @@ def rollout(env,
 def obtain_evaluation_episodes(policy,
                                env,
                                max_episode_length=1000,
-                               num_eps=100,
+                               num_eps=10,
                                deterministic=True):
     """Sample the policy for num_eps episodes and return average values.
 
