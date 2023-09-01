@@ -128,7 +128,7 @@ class Trainer:
         self._worker_class = None
         self._worker_args = None
 
-    def setup(self, algo, env):
+    def setup(self, algo, env, callback=None):
         """Set up trainer for algorithm and environment.
 
         This method saves algo and env within trainer and creates a sampler.
@@ -142,10 +142,14 @@ class Trainer:
             algo (RLAlgorithm): An algorithm instance. If this algo want to use
                 samplers, it should have a `_sampler` field.
             env (Environment): An environment instance.
+            callback (callable or None): function with the signature
+                f(env, policy, epoch) that is called every epoch.
+                Ignored if None
 
         """
         self._algo = algo
         self._env = env
+        self._callback = callback
 
         self._seed = get_seed()
 
@@ -441,12 +445,17 @@ class Trainer:
                 self._stats.total_epoch = epoch
                 self._stats.total_itr = self.step_itr
 
+                self.callback(epoch)
                 self.save(epoch)
 
                 if self.enable_logging:
                     self.log_diagnostics(self._train_args.pause_for_plot)
                     logger.dump_all(self.step_itr)
                     tabular.clear()
+
+    def callback(self, epoch):
+        if self._callback:
+            self._callback(self._env, self._algo.policy, epoch)
 
     def resume(self,
                n_epochs=None,
