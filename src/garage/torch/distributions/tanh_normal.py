@@ -1,6 +1,6 @@
 """A Gaussian distribution with tanh transformation."""
 import torch
-from torch.distributions import Normal
+from torch.distributions import Normal, constraints
 from torch.distributions.independent import Independent
 
 
@@ -17,6 +17,9 @@ class TanhNormal(torch.distributions.Distribution):
         scale (torch.Tensor): The stdev of this distribution.
 
     """ # noqa: 501
+
+    # Handled in self._normal
+    arg_constraints = {}
 
     def __init__(self, loc, scale):
         # pylint: disable=W0223
