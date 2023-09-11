@@ -2,8 +2,14 @@
 import copy
 import os
 import time
+import pstats
 
+import cProfile
+import contextlib
 import cloudpickle
+
+from pathlib import Path
+
 from dowel import logger, tabular
 
 # This is avoiding a circular import
@@ -436,7 +442,8 @@ class Trainer:
 
         for epoch in range(self._train_args.start_epoch, n_epochs):
             self._itr_start_time = time.time()
-            with logger.prefix('epoch #%d | ' % epoch):
+            profile_path = garage_profile_path(self._snapshotter.snapshot_dir, epoch)
+            with logger.prefix('epoch #%d | ' % epoch), profile(profile_path):
                 yield epoch
                 save_episode = (self.step_episode
                                 if self._train_args.store_episodes else None)
@@ -672,3 +679,22 @@ class TFTrainer(Trainer):
                     v for v in tf.compat.v1.global_variables()
                     if v.name.split(':')[0] in uninited_set
                 ]))
+
+
+@contextlib.contextmanager
+def profile(profile_path):
+    pr = cProfile.Profile()
+    pr.enable()
+
+    try:
+        yield
+    finally:
+        pr.disable()
+        stats = pstats.Stats(pr)
+        stats.dump_stats(profile_path)
+        logger.log(f'Profile available at: [{Path(profile_path).resolve()}]')
+
+
+def garage_profile_path(parent_dir, itr, *_, **__):
+    os.makedirs(parent_dir, exist_ok=True)
+    return os.path.join(parent_dir, f'epoch_{itr}.prof')
