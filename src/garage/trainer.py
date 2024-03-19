@@ -438,12 +438,14 @@ class Trainer:
             os.environ.get('GARAGE_EXAMPLE_TEST_N_EPOCHS',
                            self._train_args.n_epochs))
 
+        perform_profile = os.environ.get('GARAGE_PROFILE_EPOCHS', 0)
+
         logger.log('Obtaining samples...')
 
         for epoch in range(self._train_args.start_epoch, n_epochs):
             self._itr_start_time = time.time()
             profile_path = garage_profile_path(self._snapshotter.snapshot_dir, epoch)
-            with logger.prefix('epoch #%d | ' % epoch), profile(profile_path):
+            with logger.prefix('epoch #%d | ' % epoch), potential_profile(profile_path, perform_profile=perform_profile):
                 yield epoch
                 save_episode = (self.step_episode
                                 if self._train_args.store_episodes else None)
@@ -679,6 +681,14 @@ class TFTrainer(Trainer):
                     v for v in tf.compat.v1.global_variables()
                     if v.name.split(':')[0] in uninited_set
                 ]))
+
+def potential_profile(profile_path, do_profile=False):
+    if do_profile:
+        cm = profile(profile_path)
+    else:
+        cm = contextlib.nullcontext()
+
+    return cm
 
 
 @contextlib.contextmanager
