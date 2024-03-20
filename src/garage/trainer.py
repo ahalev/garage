@@ -682,7 +682,7 @@ class TFTrainer(Trainer):
                     if v.name.split(':')[0] in uninited_set
                 ]))
 
-def potential_profile(profile_path, do_profile=False):
+def potential_profile(profile_path, perform_profile=False):
     if do_profile:
         cm = profile(profile_path)
     else:
