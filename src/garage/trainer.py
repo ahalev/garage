@@ -683,7 +683,7 @@ class TFTrainer(Trainer):
                 ]))
 
 def potential_profile(profile_path, perform_profile=False):
-    if do_profile:
+    if perform_profile:
         cm = profile(profile_path)
     else:
         cm = contextlib.nullcontext()
