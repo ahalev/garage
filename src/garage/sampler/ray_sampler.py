@@ -79,7 +79,7 @@ class RaySampler(Sampler):
         # using GPU.
         # Avoid floating point rounding issues by rounding number of workers up
         # to a power of 2:
-        n_workers_pow_2 = 2 ** math.ceil(math.log2(worker_factory.n_workers))
+        n_workers_pow_2 = 2 ** math.ceil(math.log2(self._worker_factory.n_workers))
         remote_wrapper = ray.remote(num_gpus=1 / n_workers_pow_2)
         self._sampler_worker = remote_wrapper(SamplerWorker)
         self._agents = agents
