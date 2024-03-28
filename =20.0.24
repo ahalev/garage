@@ -1,0 +1,9 @@
+Collecting virtualenv
+  Using cached virtualenv-20.21.0-py3-none-any.whl (8.7 MB)
+Requirement already satisfied: filelock<4,>=3.4.1 in /Users/ahalev/miniforge3/envs/forge_rl_env/lib/python3.9/site-packages (from virtualenv) (3.11.0)
+Collecting platformdirs<4,>=2.4
+  Using cached platformdirs-3.2.0-py3-none-any.whl (14 kB)
+Collecting distlib<1,>=0.3.6
+  Using cached distlib-0.3.6-py2.py3-none-any.whl (468 kB)
+Installing collected packages: distlib, platformdirs, virtualenv
+Successfully installed distlib-0.3.6 platformdirs-3.2.0 virtualenv-20.21.0
