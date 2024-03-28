@@ -28,7 +28,6 @@ class RLAlgorithm(abc.ABC):
         """
 
     @property
-    @abc.abstractmethod
     def networks(self):
         """
         Return torch networks.
